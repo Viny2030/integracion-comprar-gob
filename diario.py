@@ -4,7 +4,12 @@ import pandas as pd
 from datetime import datetime
 import os
 import time
-import analisis  # Reutilizamos tu cerebro teórico
+
+# IMPORTAMOS TU CEREBRO CENTRAL
+# Esto evita tener las reglas escritas dos veces.
+# Si actualizas analisis.py, el robot se actualiza solo.
+import analisis
+from analisis import REGLAS_CLASIFICACION
 
 # Configuración
 DATA_DIR = "data"
@@ -17,62 +22,16 @@ HEADERS = {
     "Connection": "keep-alive",
 }
 
-# --- LÓGICA COPIADA DE MAIN.PY (Versión Headless) ---
-TIPO_DECISION_ESTATAL = {
-    "Privatización / Concesión": [
-        "concesión",
-        "privatización",
-        "venta de pliegos",
-        "adjudicación",
-        "licitación pública nacional e internacional",
-    ],
-    "Obra Pública / Contratos": [
-        "obra pública",
-        "redeterminación de precios",
-        "contratación directa",
-        "ajuste de contrato",
-        "continuidad de obra",
-    ],
-    "Tarifas Servicios Públicos": [
-        "cuadro tarifario",
-        "aumento de tarifa",
-        "revisión tarifaria",
-        "ente regulador",
-        "precio mayorista",
-        "peaje",
-    ],
-    "Compensación por Devaluación": [
-        "compensación cambiaria",
-        "diferencia de cambio",
-        "bono fiscal",
-        "subsidio extraordinario",
-    ],
-    "Servicios Privados (Salud/Educación)": [
-        "medicina prepaga",
-        "cuota colegio",
-        "arancel educativo",
-        "superintendencia de servicios de salud",
-        "autorízase aumento",
-    ],
-    "Jubilaciones / Pensiones": [
-        "movilidad jubilatoria",
-        "haber mínimo",
-        "anses",
-        "índice de actualización",
-        "bono previsional",
-    ],
-    "Traslado Impositivo": [
-        "traslado a precios",
-        "incidencia impositiva",
-        "impuesto al consumo",
-        "tasas y contribuciones",
-    ],
-}
+# --- LÓGICA DE CLASIFICACIÓN (Usando reglas importadas) ---
 
 
 def clasificar_decision_estatal(texto: str) -> str:
+    """
+    Clasifica el texto usando el diccionario maestro importado de analisis.py
+    """
     texto = texto.lower()
-    for tipo, palabras in TIPO_DECISION_ESTATAL.items():
+    # Usamos REGLAS_CLASIFICACION en lugar de redefinir el diccionario aquí
+    for tipo, palabras in REGLAS_CLASIFICACION.items():
         if any(p in texto for p in palabras):
             return tipo
     return "No identificado"
@@ -92,8 +51,11 @@ def parsear_normas(html, seccion_nombre, fecha_target):
     normas = []
     for link in soup.find_all("a", href=True):
         href = link.get("href", "")
+        # Filtros típicos del Boletín Oficial
         if any(x in href for x in ["DetalleNorma", "idNorma", "detalleAviso"]):
             detalle = link.get_text(strip=True)
+
+            # Filtro básico de longitud para evitar ruido
             if len(detalle) > 15:
                 tipo = clasificar_decision_estatal(detalle)
                 normas.append(
@@ -112,7 +74,7 @@ def parsear_normas(html, seccion_nombre, fecha_target):
 
 # --- EJECUCIÓN PRINCIPAL ---
 if __name__ == "__main__":
-    print("--- INICIANDO ROBOT DIARIO ---")
+    print("--- INICIANDO ROBOT DIARIO (Auditoría Activada) ---")
     fecha_obj = datetime.now()
     fecha_str = fecha_obj.strftime("%Y%m%d")
     print(f"Fecha objetivo: {fecha_str}")
@@ -134,14 +96,23 @@ if __name__ == "__main__":
         time.sleep(2)
 
     if registros:
-        print("Procesando datos con teoría 'Great Corruption'...")
+        print("\nProcesando datos con teoría 'Great Corruption' y Auditoría Ética...")
         df_raw = pd.DataFrame(registros)
-        # Usamos tu modulo de analisis
+
+        # Llamamos al módulo de análisis (que ahora limpia, audita y explica)
         df_proc, path, _ = analisis.analizar_boletin(df_raw)
 
-        # Filtramos solo lo relevante para mostrar en consola
-        alertas = len(df_proc[df_proc["tipo_decision"] != "No identificado"])
-        print(f"✅ EXITO. Reporte generado en: {path}")
-        print(f"📊 Total Normas: {len(df_proc)} | Alertas Teóricas: {alertas}")
+        # --- MÉTRICAS DEL REPORTE ---
+        fenomenos = len(df_proc[df_proc["tipo_decision"] != "No identificado"])
+
+        # Contamos cuántas filas tienen una alerta de auditoría (que no sea "OK")
+        revisiones = len(df_proc[df_proc["auditoria_estado"] != "OK"])
+
+        print(f"\n=== RESUMEN DEL DÍA ===")
+        print(f"   [+] Fenómenos Identificados: {fenomenos}")
+        print(f"   [!] Casos que requieren Revisión Humana: {revisiones}")
+        print(f"   [>] Reporte Excel generado: {path}")
+        print("=======================")
     else:
-        print("⚠️ No se encontraron normas hoy (o hubo bloqueo).")
+        print("\nNo se encontraron registros relevantes hoy.")
+        # -----------------------------------------------------

@@ -176,7 +176,7 @@
 							</div>
 							<h6 class="text-primary-alt text-bold">Edición del</h6>
 							<h6 class="text-primary-alt text-bold">
-								<b>20 de Enero de 2026</b>
+								<b>21 de Enero de 2026</b>
 							</h6>
 							<div class="row row-panel ">
 								<hr>
@@ -195,11 +195,11 @@
     var producirRecarga = '1';
     var cambioDeAnio = false;
 
-    var diaSeleccionado=new Date(2026,01-1,20);
-    var fechaSeleccionada = '20-01-2026';
-    var fechaSeleccionadaYMD = '20260120';
+    var diaSeleccionado=new Date(2026,01-1,21);
+    var fechaSeleccionada = '21-01-2026';
+    var fechaSeleccionadaYMD = '20260121';
     var anioAnteriorPortada = parseInt(fechaSeleccionada.split("-")[2]);
-    var fechaUltimaEdicionPortada = '20-01-2026';
+    var fechaUltimaEdicionPortada = '21-01-2026';
 
     urlGetDiasHabilitadosPorAnio = "/calendario/dias_publicacion/0/0";
     urlGetDiasHabilitadosPorAnio = urlGetDiasHabilitadosPorAnio.substring(0, urlGetDiasHabilitadosPorAnio.lastIndexOf("/"));
@@ -214,7 +214,7 @@
 
     nombreSeccionPortada = 'primera';
 
-            var diasHabilitadosPortadaSuplemento = JSON.parse('{"fechas_con_suplemento":[],"fechas":["20260102","20260105","20260106","20260107","20260108","20260109","20260112","20260113","20260114","20260115","20260116","20260119","20260120"]}');
+            var diasHabilitadosPortadaSuplemento = JSON.parse('{"fechas_con_suplemento":[],"fechas":["20260102","20260105","20260106","20260107","20260108","20260109","20260112","20260113","20260114","20260115","20260116","20260119","20260120","20260121"]}');
         var diasHabilitadosPortada = diasHabilitadosPortadaSuplemento['fechas'];
         if (diasHabilitadosPortada != undefined && diasHabilitadosPortada != null && diasHabilitadosPortada.length != 0 && anioAnteriorPortada != diasHabilitadosPortada[0].substring(0,4)){
             actualizarDiasHabilitadosPortada('#divCalendario',anioAnteriorPortada);
@@ -222,7 +222,7 @@
     
     $('#divCalendario').datepicker({
         startDate: fechaInicioCalendario,
-        endDate: '20-01-2026',
+        endDate: '21-01-2026',
         weekStart: 0,
         container: '#divCalendario',
         language: "es",
@@ -244,7 +244,7 @@
 
             return {enabled: fechaHabilitada, classes: classDay, tooltip: tooltipDay};
         }
-    }).datepicker('setDate','20-01-2026')
+    }).datepicker('setDate','21-01-2026')
         .on('changeDate', onChangeDate)
         .on('changeMonth', function(e){
             onChangeMonthPortada("#divCalendario", cambioDeAnio);
@@ -471,7 +471,7 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                 Avisos oficiales<br>
         <span class="menuRubros">
                     
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '86', '20260120'); return false; "> Avisos oficiales (8)
+            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '86', '20260121'); return false; "> Avisos oficiales (11)
         </a>
     
 
@@ -487,33 +487,12 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                 Disposiciones<br>
         <span class="menuRubros">
                     
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '64', '20260120'); return false; "> Disposicion sintetizada (3)
+            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '64', '20260121'); return false; "> Disposicion sintetizada (4)
         </a>
     
 
                     
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '5006', '20260120'); return false; "> Disposiciones (8)
-        </a>
-    
-
-                </span>
-    
-
-                                        </p>
-                                    </div>
-                                                                    <div class="col-md-6 col-sm-4 col-xs-6 form-group">
-                                        <p>
-                                            
-    
-                Legislacion<br>
-        <span class="menuRubros">
-                    
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '77', '20260120'); return false; "> Decisiones administrativas (1)
-        </a>
-    
-
-                    
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '24', '20260120'); return false; "> Decretos (1)
+            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '5006', '20260121'); return false; "> Disposiciones (5)
         </a>
     
 
@@ -529,17 +508,17 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                 Resoluciones<br>
         <span class="menuRubros">
                     
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '62', '20260120'); return false; "> Resolucion sintetizada (2)
+            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '62', '20260121'); return false; "> Resolucion sintetizada (2)
         </a>
     
 
                     
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '1715', '20260120'); return false; "> Resoluciones (9)
+            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '1715', '20260121'); return false; "> Resoluciones (7)
         </a>
     
 
                     
-            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '5001', '20260120'); return false; "> Resolución conjunta (1)
+            <a class="puntero text-primary-alt" onclick="realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '63', '20260121'); return false; "> Resolución general (2)
         </a>
     
 
@@ -559,86 +538,19 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
     <div class="col-md-12 avisosSeccionDiv" id="avisosSeccionDiv">
                                                                                                                                                    <div class="row">
                                 <div class="col-md-12">
-                                   <h5 class="seccion-rubro text-white bg-first-section">DECRETOS                                     </h5>
-                                </div>
-                            </div>
-                                                                                                                                                                                                                                            <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337566/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337566');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">PROCEDIMIENTOS ADMINISTRATIVOS </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Decreto 25/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>DECTO-2026-25-APN-PTE - Recházase recurso.</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                               <div class="row">
-                                <div class="col-md-12">
-                                   <h5 class="seccion-rubro text-white bg-first-section">DECISIONES ADMINISTRATIVAS                                     </h5>
-                                </div>
-                            </div>
-                                                                                                                                                                                                                                            <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337567/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337567');"
-                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
-                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        </a>
-                                                                                                            <a href="/detalleAviso/primera/337567/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337567');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">PRESUPUESTO </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Decisión Administrativa 1/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>DA-2026-1-APN-JGM - Presupuesto General de la Administración Nacional para el Ejercicio 2026. Distributivo.</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                               <div class="row">
-                                <div class="col-md-12">
                                    <h5 class="seccion-rubro text-white bg-first-section">RESOLUCIONES                                     </h5>
                                 </div>
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337568/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337568');"
-                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
-                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        </a>
-                                                                                                            <a href="/detalleAviso/primera/337568/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337568');">
+                                                                                                                                                <a href="/detalleAviso/primera/337599/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337599');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">ADMINISTRACIÓN NACIONAL DE AVIACIÓN CIVIL </p>
+                                            <p class="item">DIRECCIÓN NACIONAL DE VIALIDAD </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Resolución 35/2026</small>
+                                                    <small>Resolución 69/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>RESOL-2026-35-APN-ANAC#MEC</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337569/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337569');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO - DIRECCIÓN GENERAL DE ADUANAS </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Resolución 8/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>RESOL-2026-8-E-ARCA-DGADUA</small>
+                                                    <small>RESOL-2026-69-APN-DNV#MEC</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -647,64 +559,19 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
                                                                                                                                                                                                 <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337570/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337570');"
+                                           href="/detalleAviso/primera/337600/20260121?anexos=1"
+                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337600');"
                                            data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </a>
-                                                                                                            <a href="/detalleAviso/primera/337570/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337570');">
+                                                                                                            <a href="/detalleAviso/primera/337600/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337600');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">INSTITUTO NACIONAL DE CINE Y ARTES AUDIOVISUALES </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Resolución 9/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>RESOL-2026-9-APN-INCAA#SC</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337571/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337571');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">INSTITUTO NACIONAL DE LA YERBA MATE </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Resolución 2/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small></small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337572/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337572');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">JEFATURA DE GABINETE DE MINISTROS - SECRETARÍA DE COORDINACIÓN LEGAL Y ADMINISTRATIVA </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Resolución 6/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>RESOL-2026-6-APN-SCLYA#JGM</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337573/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337573');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">MINISTERIO DE ECONOMÍA - SECRETARÍA DE ENERGÍA </p>
+                                            <p class="item">ENTE NACIONAL REGULADOR DEL GAS </p>
                                                                                             <p class="item-detalle">
                                                     <small>Resolución 15/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>RESOL-2026-15-APN-SE#MEC</small>
+                                                    <small>RESOL-2026-15-APN-DIRECTORIO#ENARGAS</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -712,14 +579,29 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337574/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337574');">
+                                                                                                                                                <a href="/detalleAviso/primera/337601/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337601');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">MINISTERIO DE CAPITAL HUMANO - SECRETARÍA DE TRABAJO, EMPLEO Y SEGURIDAD SOCIAL </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Resolución 79/2026</small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small>RESOL-2026-79-APN-STEYSS#MCH</small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337602/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337602');">
                                                                             <div class="linea-aviso">
                                             <p class="item">MINISTERIO DE ECONOMÍA - SECRETARÍA DE INDUSTRIA Y COMERCIO </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Resolución 19/2026</small>
+                                                    <small>Resolución 20/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>RESOL-2026-19-APN-SIYC#MEC</small>
+                                                    <small>RESOL-2026-20-APN-SIYC#MEC</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -727,14 +609,14 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337575/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337575');">
+                                                                                                                                                <a href="/detalleAviso/primera/337603/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337603');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">MINISTERIO DE SALUD </p>
+                                            <p class="item">MINISTERIO DE ECONOMÍA - SECRETARÍA DE OBRAS PÚBLICAS </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Resolución 238/2026</small>
+                                                    <small>Resolución 9/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>RESOL-2026-238-APN-MS</small>
+                                                    <small>RESOL-2026-9-APN-SOP#MEC</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -742,14 +624,35 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337576/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337576');">
+                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
+                                           href="/detalleAviso/primera/337604/20260121?anexos=1"
+                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337604');"
+                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </a>
+                                                                                                            <a href="/detalleAviso/primera/337604/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337604');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">MINISTERIO DE ECONOMÍA - SECRETARÍA DE OBRAS PÚBLICAS </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Resolución 11/2026</small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small>RESOL-2026-11-APN-SOP#MEC</small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337605/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337605');">
                                                                             <div class="linea-aviso">
                                             <p class="item">MINISTERIO DE SEGURIDAD NACIONAL </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Resolución 40/2026</small>
+                                                    <small>Resolución 47/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>RESOL-2026-40-APN-MSG</small>
+                                                    <small>RESOL-2026-47-APN-MSG</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -757,19 +660,34 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                <div class="row">
                                 <div class="col-md-12">
-                                   <h5 class="seccion-rubro text-white bg-first-section">RESOLUCIONES CONJUNTAS                                     </h5>
+                                   <h5 class="seccion-rubro text-white bg-first-section">RESOLUCIONES GENERALES                                     </h5>
                                 </div>
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337577/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337577');">
+                                                                                                                                                <a href="/detalleAviso/primera/337606/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337606');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">MINISTERIO DE SEGURIDAD NACIONAL Y MINISTERIO DE RELACIONES EXTERIORES, COMERCIO INTERNACIONAL Y CULTO </p>
+                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Resolución Conjunta 1/2026</small>
+                                                    <small>Resolución General 5816/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>RESFC-2026-1-APN-MSG</small>
+                                                    <small>RESOG-2026-5816-E-ARCA-ARCA - Procedimiento. Sociedades de Garantía Recíproca (S.G.R.). Socios Protectores. Régimen de información. Resolución General...</small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337607/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337607');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Resolución General 5817/2026</small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small>RESOG-2026-5817-E-ARCA-ARCA - Seguridad Social. Decreto N° 394/23 y sus modificatorios. Beneficio a Microempresas. Pago a cuenta de contribuciones pat...</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -782,9 +700,9 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337578/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337578');">
+                                                                                                                                                <a href="/detalleAviso/primera/337608/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337608');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">ENTE REGULADOR DE AGUA Y SANEAMIENTO </p>
+                                            <p class="item">AGENCIA DE PLANIFICACIÓN </p>
                                                                                             <p class="item-detalle">
                                                     <small>Resolución Sintetizada 1/2026</small>
                                                 </p>
@@ -797,11 +715,11 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337579/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337579');">
+                                                                                                                                                <a href="/detalleAviso/primera/337609/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337609');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">SUPERINTENDENCIA DE SEGUROS DE LA NACIÓN </p>
+                                            <p class="item">ENTE NACIONAL REGULADOR DE LA ELECTRICIDAD </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Resolución Sintetizada 14/2026</small>
+                                                    <small>Resolución Sintetizada 13/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
                                                     <small></small>
@@ -817,20 +735,14 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337580/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337580');"
-                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
-                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        </a>
-                                                                                                            <a href="/detalleAviso/primera/337580/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337580');">
+                                                                                                                                                <a href="/detalleAviso/primera/337610/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337610');">
                                                                             <div class="linea-aviso">
                                             <p class="item">ADMINISTRACIÓN NACIONAL DE MEDICAMENTOS, ALIMENTOS Y TECNOLOGÍA MÉDICA </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición 47/2026</small>
+                                                    <small>Disposición 63/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>DI-2026-47-APN-ANMAT#MS</small>
+                                                    <small>DI-2026-63-APN-ANMAT#MS</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -838,20 +750,14 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337581/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337581');"
-                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
-                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        </a>
-                                                                                                            <a href="/detalleAviso/primera/337581/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337581');">
+                                                                                                                                                <a href="/detalleAviso/primera/337611/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337611');">
                                                                             <div class="linea-aviso">
                                             <p class="item">ADMINISTRACIÓN NACIONAL DE MEDICAMENTOS, ALIMENTOS Y TECNOLOGÍA MÉDICA </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición 72/2026</small>
+                                                    <small>Disposición 66/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>DI-2026-72-APN-ANMAT#MS</small>
+                                                    <small>DI-2026-66-APN-ANMAT#MS</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -859,14 +765,14 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337582/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337582');">
+                                                                                                                                                <a href="/detalleAviso/primera/337612/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337612');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO - DIRECCIÓN REGIONAL SALTA </p>
+                                            <p class="item">ADMINISTRACIÓN NACIONAL DE MEDICAMENTOS, ALIMENTOS Y TECNOLOGÍA MÉDICA </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición 3/2026</small>
+                                                    <small>Disposición 68/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>DI-2026-3-E-ARCA-DIRSAL#SDGOPII</small>
+                                                    <small>DI-2026-68-APN-ANMAT#MS</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -874,35 +780,14 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337583/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337583');"
-                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
-                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        </a>
-                                                                                                            <a href="/detalleAviso/primera/337583/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337583');">
+                                                                                                                                                <a href="/detalleAviso/primera/337613/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337613');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">AGENCIA NACIONAL DE SEGURIDAD VIAL </p>
+                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición 10/2026</small>
+                                                    <small>Disposición 5/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>DI-2026-10-APN-ANSV#MEC</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337584/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337584');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">AGENCIA NACIONAL DE SEGURIDAD VIAL </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Disposición 11/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>DI-2026-11-APN-ANSV#MEC</small>
+                                                    <small>DI-2026-5-E-ARCA-ARCA</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -911,55 +796,19 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
                                                                                                                                                                                                 <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337585/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337585');"
+                                           href="/detalleAviso/primera/337614/20260121?anexos=1"
+                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337614');"
                                            data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
                                             <i class="fa fa-paperclip" aria-hidden="true"></i>
                                         </a>
-                                                                                                            <a href="/detalleAviso/primera/337585/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337585');">
+                                                                                                            <a href="/detalleAviso/primera/337614/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337614');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">MINISTERIO DE ECONOMÍA - SUBSECRETARÍA DE TRANSICIÓN Y PLANEAMIENTO ENERGÉTICO </p>
+                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO - ADUANA OBERÁ </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición 1/2026</small>
+                                                    <small>Disposición 6/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
-                                                    <small>DI-2026-1-APN-SSTYPE#MEC</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
-                                           href="/detalleAviso/primera/337586/20260120?anexos=1"
-                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337586');"
-                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
-                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
-                                        </a>
-                                                                                                            <a href="/detalleAviso/primera/337586/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337586');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">MINISTERIO DE ECONOMÍA - SUBSECRETARÍA DE TRANSICIÓN Y PLANEAMIENTO ENERGÉTICO </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Disposición 2/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>DI-2026-2-APN-SSTYPE#MEC</small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337587/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337587');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">PREFECTURA NAVAL ARGENTINA </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Disposición 39/2026</small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small>DISFC-2026-39-APN-PNA#MSG</small>
+                                                    <small>DI-2026-6-E-ARCA-ADOBER#SDGOAI</small>
                                                 </p>
                                                                                     </div>
                                     </a>
@@ -972,11 +821,11 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337588/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337588');">
+                                                                                                                                                <a href="/detalleAviso/primera/337615/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337615');">
                                                                             <div class="linea-aviso">
                                             <p class="item">ENTE NACIONAL DE COMUNICACIONES </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición Sintetizada 1326/2026</small>
+                                                    <small>Disposición Sintetizada 235/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
                                                     <small></small>
@@ -987,11 +836,11 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337589/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337589');">
+                                                                                                                                                <a href="/detalleAviso/primera/337616/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337616');">
                                                                             <div class="linea-aviso">
                                             <p class="item">ENTE NACIONAL DE COMUNICACIONES </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición Sintetizada 1329/2026</small>
+                                                    <small>Disposición Sintetizada 1328/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
                                                     <small></small>
@@ -1002,11 +851,26 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337590/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337590');">
+                                                                                                                                                <a href="/detalleAviso/primera/337617/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337617');">
                                                                             <div class="linea-aviso">
                                             <p class="item">ENTE NACIONAL DE COMUNICACIONES </p>
                                                                                             <p class="item-detalle">
-                                                    <small>Disposición Sintetizada 1489/2026</small>
+                                                    <small>Disposición Sintetizada 1359/2026</small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small></small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337618/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337618');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">ENTE NACIONAL DE COMUNICACIONES </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Disposición Sintetizada 1814/2026</small>
                                                 </p>
                                                                                                                                                                                     <p class="item-detalle" >
                                                     <small></small>
@@ -1022,7 +886,7 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337591/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337591');">
+                                                                                                                                                <a href="/detalleAviso/primera/337619/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337619');">
                                                                             <div class="linea-aviso">
                                             <p class="item">BANCO DE LA NACIÓN ARGENTINA </p>
                                                                                             <p class="item-detalle">
@@ -1037,9 +901,36 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337592/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337592');">
+                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
+                                           href="/detalleAviso/primera/337620/20260121?anexos=1"
+                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337620');"
+                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </a>
+                                                                                                            <a href="/detalleAviso/primera/337620/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337620');">
                                                                             <div class="linea-aviso">
                                             <p class="item">BANCO CENTRAL DE LA REPÚBLICA ARGENTINA </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Comunicación "B" 13110/2026</small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small></small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
+                                           href="/detalleAviso/primera/337621/20260121?anexos=1"
+                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337621');"
+                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </a>
+                                                                                                            <a href="/detalleAviso/primera/337621/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337621');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO - DIRECCIÓN ADUANA DE BUENOS AIRES </p>
                                                                                             <p class="item-detalle">
                                                     <small>Aviso Oficial </small>
                                                 </p>
@@ -1052,7 +943,7 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337593/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337593');">
+                                                                                                                                                <a href="/detalleAviso/primera/337622/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337622');">
                                                                             <div class="linea-aviso">
                                             <p class="item">INSTITUTO NACIONAL DE ASOCIATIVISMO Y ECONOMÍA SOCIAL </p>
                                                                                             <p class="item-detalle">
@@ -1067,9 +958,15 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337594/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337594');">
+                                                                                                                                                                                                <a data-toggle="tooltip" style="margin-left: 10px; margin-top: 10px"
+                                           href="/detalleAviso/primera/337623/20260121?anexos=1"
+                                           onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337623');"
+                                           data-container="body" title="Ver anexos" class="btn btn-sm btn-link pull-right bg-first-section">
+                                            <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                        </a>
+                                                                                                            <a href="/detalleAviso/primera/337623/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337623');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">INSTITUTO NACIONAL DE SEMILLAS </p>
+                                            <p class="item">INSTITUTO NACIONAL DE ASOCIATIVISMO Y ECONOMÍA SOCIAL </p>
                                                                                             <p class="item-detalle">
                                                     <small>Aviso Oficial </small>
                                                 </p>
@@ -1082,9 +979,39 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337595/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337595');">
+                                                                                                                                                <a href="/detalleAviso/primera/337624/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337624');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">MINISTERIO DE ECONOMÍA - SUBSECRETARÍA DE ENERGÍA ELÉCTRICA </p>
+                                            <p class="item">INSTITUTO NACIONAL DE ASOCIATIVISMO Y ECONOMÍA SOCIAL </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Aviso Oficial </small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small></small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337625/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337625');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">INSTITUTO NACIONAL DE ASOCIATIVISMO Y ECONOMÍA SOCIAL </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Aviso Oficial </small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small></small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337626/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337626');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">INSTITUTO NACIONAL DE ASOCIATIVISMO Y ECONOMÍA SOCIAL </p>
                                                                                             <p class="item-detalle">
                                                     <small>Aviso Oficial </small>
                                                 </p>
@@ -1102,22 +1029,7 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                                                                                             <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337596/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337596');">
-                                                                            <div class="linea-aviso">
-                                            <p class="item">AGENCIA DE RECAUDACIÓN Y CONTROL ADUANERO </p>
-                                                                                            <p class="item-detalle">
-                                                    <small>Aviso Oficial </small>
-                                                </p>
-                                                                                                                                                                                    <p class="item-detalle" >
-                                                    <small></small>
-                                                </p>
-                                                                                    </div>
-                                    </a>
-                                </div>
-                            </div>
-                                                                                                                                                                    <div class="row">
-                                <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337597/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337597');">
+                                                                                                                                                <a href="/detalleAviso/primera/337627/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337627');">
                                                                             <div class="linea-aviso">
                                             <p class="item">BANCO CENTRAL DE LA REPÚBLICA ARGENTINA </p>
                                                                                             <p class="item-detalle">
@@ -1132,9 +1044,24 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
                             </div>
                                                                                                                                                                     <div class="row">
                                 <div class="col-md-12">
-                                                                                                                                                <a href="/detalleAviso/primera/337598/20260120" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337598');">
+                                                                                                                                                <a href="/detalleAviso/primera/337628/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337628');">
                                                                             <div class="linea-aviso">
-                                            <p class="item">SUPERINTENDENCIA DE SERVICIOS DE SALUD </p>
+                                            <p class="item">BANCO CENTRAL DE LA REPÚBLICA ARGENTINA </p>
+                                                                                            <p class="item-detalle">
+                                                    <small>Aviso Oficial </small>
+                                                </p>
+                                                                                                                                                                                    <p class="item-detalle" >
+                                                    <small></small>
+                                                </p>
+                                                                                    </div>
+                                    </a>
+                                </div>
+                            </div>
+                                                                                                                                                                    <div class="row">
+                                <div class="col-md-12">
+                                                                                                                                                <a href="/detalleAviso/primera/337629/20260121" onclick="sendDetalleEvent('Visto', 'Aviso de la Seccion: Primera ID: 337629');">
+                                                                            <div class="linea-aviso">
+                                            <p class="item">INSTITUTO NACIONAL DE ASOCIATIVISMO Y ECONOMÍA SOCIAL </p>
                                                                                             <p class="item-detalle">
                                                     <small>Aviso Oficial </small>
                                                 </p>
@@ -1171,7 +1098,7 @@ ejecutandoLlamadaAsincronicaBusquedaRapida = false;
 
     $(document).ready(function(){
         if("" ){
-            $.when( realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '', '20260120'))
+            $.when( realizarBusquedaRubro('/seccion/buscarRubro', 'primera', '', '20260121'))
                 .then(function() {
                     sessionStorage.setItem('idRubro', '');
                 });

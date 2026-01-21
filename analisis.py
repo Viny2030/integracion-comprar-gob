@@ -1,18 +1,82 @@
 import pandas as pd
 import os
+import unicodedata
 from datetime import datetime
 
-# ===============================
-# CONFIGURACIÓN DE ENTORNO
-# ===============================
+# ==========================================
+# 1. CONFIGURACIÓN E INFRAESTRUCTURA
+# ==========================================
 if os.path.exists("/app"):
     DATA_DIR = "/app/data"
 else:
     DATA_DIR = os.path.join(os.getcwd(), "data")
 
-# ===============================
-# MATRIZ DE TRANSFERENCIAS (TEORÍA)
-# ===============================
+# ==========================================
+# 2. BASE DE CONOCIMIENTO (REGLAS EXPORTABLES)
+# ==========================================
+REGLAS_CLASIFICACION = {
+    "Privatización / Concesión": [
+        "concesión",
+        "privatización",
+        "venta de pliegos",
+        "adjudicación",
+        "licitación pública nacional e internacional",
+    ],
+    "Obra Pública / Contratos": [
+        "obra pública",
+        "redeterminación de precios",
+        "contratación directa",
+        "ajuste de contrato",
+        "continuidad de obra",
+    ],
+    "Tarifas Servicios Públicos": [
+        "cuadro tarifario",
+        "aumento de tarifa",
+        "revisión tarifaria",
+        "ente regulador",
+        "precio mayorista",
+        "peaje",
+    ],
+    "Compensación por Devaluación": [
+        "compensación cambiaria",
+        "diferencia de cambio",
+        "bono fiscal",
+        "subsidio extraordinario",
+    ],
+    "Servicios Privados (Salud/Educación)": [
+        "medicina prepaga",
+        "cuota colegio",
+        "arancel educativo",
+        "superintendencia de servicios de salud",
+        "autorízase aumento",
+    ],
+    "Jubilaciones / Pensiones": [
+        "movilidad jubilatoria",
+        "haber mínimo",
+        "anses",
+        "índice de actualización",
+        "bono previsional",
+    ],
+    "Traslado Impositivo": [
+        "traslado a precios",
+        "incidencia impositiva",
+        "impuesto al consumo",
+        "tasas y contribuciones",
+    ],
+}
+
+PALABRAS_ALERTA_AUDITORIA = [
+    "millones",
+    "asignación",
+    "transferencia",
+    "fondo fiduciario",
+    "partida presupuestaria",
+    "erogación",
+    "compra",
+    "contratación",
+    "pago",
+]
+
 MATRIZ_TEORICA = {
     "Privatización / Concesión": {
         "origen": "Patrimonio Estatal",
@@ -65,14 +129,71 @@ MATRIZ_TEORICA = {
     },
 }
 
+# ==========================================
+# 3. FUNCIONES DE HIGIENE Y CLASIFICACIÓN
+# ==========================================
+
+
+def limpiar_texto_curado(texto):
+    """Normaliza el texto para evitar errores por codificación."""
+    if not isinstance(texto, str):
+        return ""
+    texto = unicodedata.normalize("NFKC", texto)
+    return texto.strip()
+
+
+def clasificar_texto_interno(texto):
+    """
+    Función interna para clasificar texto crudo si llega 'No identificado'.
+    Usa las reglas definidas arriba.
+    """
+    texto = str(texto).lower()
+    for tipo, palabras in REGLAS_CLASIFICACION.items():
+        if any(p in texto for p in palabras):
+            return tipo
+    return "No identificado"
+
+
+def recuperar_evidencia_xai(row):
+    """
+    [XAI] Busca qué palabra clave activó la regla.
+    """
+    tipo = row.get("tipo_decision")
+    texto = str(row.get("detalle", "")).lower()
+
+    if not tipo or tipo == "No identificado":
+        return "-"
+
+    if tipo in REGLAS_CLASIFICACION:
+        palabras = REGLAS_CLASIFICACION[tipo]
+        for p in palabras:
+            if p.lower() in texto:
+                return p
+    return "Inferencia implícita"
+
+
+def flag_revision_humana(row):
+    """Detecta Falsos Negativos para auditoría."""
+    if row["tipo_decision"] == "No identificado":
+        texto = str(row.get("detalle", "")).lower()
+        matches = [p for p in PALABRAS_ALERTA_AUDITORIA if p in texto]
+        if matches:
+            return f"⚠️ REVISAR: Posible {matches[0]}"
+    return "OK"
+
+
+# ==========================================
+# 4. LÓGICA DE NEGOCIO
+# ==========================================
+
 
 def aplicar_matriz_teorica(tipo_decision):
     return MATRIZ_TEORICA.get(
         tipo_decision,
         {
-            "origen": "Indeterminado",
-            "destino": "Indeterminado",
-            "mecanismo": "No detectado",
+            "origen": "-",
+            "destino": "-",
+            "mecanismo": "-",
             "certeza_nivel": "Nula",
             "puntos_certeza": 0,
         },
@@ -95,10 +216,8 @@ def desglosar_indice(row):
     p_discrecional = 30
     datos_teoricos = MATRIZ_TEORICA.get(row["tipo_decision"])
     p_certeza = datos_teoricos["puntos_certeza"] if datos_teoricos else 0
-    certeza_txt = datos_teoricos["certeza_nivel"] if datos_teoricos else "Nula"
-
     total = p_legal + p_discrecional + p_certeza
-    explicacion = f"Legal({p_legal}) + Discrec({p_discrecional}) + Certeza {certeza_txt}({p_certeza}) = {total}%"
+    certeza_txt = datos_teoricos["certeza_nivel"] if datos_teoricos else "Nula"
 
     return pd.Series(
         {
@@ -106,74 +225,87 @@ def desglosar_indice(row):
             "idx_discrecionalidad": p_discrecional,
             "idx_certeza": p_certeza,
             "indice_total": total,
-            "elaboracion_indice": explicacion,
+            "elaboracion_indice": f"Leg({p_legal})+Dis({p_discrecional})+Cert({p_certeza})",
         }
     )
 
 
-# ===============================
-# PROCESAMIENTO PRINCIPAL
-# ===============================
+# ==========================================
+# 5. ORQUESTADOR PRINCIPAL
+# ==========================================
 
 
 def analizar_boletin(df):
-    # 1. Aplicar lógica
-    detalles = df["tipo_decision"].apply(aplicar_matriz_teorica)
-    df_detalles = pd.json_normalize(detalles)
-    df = pd.concat(
-        [df.reset_index(drop=True), df_detalles.reset_index(drop=True)], axis=1
+    """
+    Recibe el DataFrame crudo, lo CLASIFICA (si hace falta), limpia, audita y enriquece.
+    """
+    if df.empty:
+        return df, None, pd.DataFrame()
+
+    # PASO 1: Curado de Datos
+    df["detalle"] = df["detalle"].apply(limpiar_texto_curado)
+
+    # PASO 2: Clasificación Robusta (CORRECCIÓN CRÍTICA PARA TEST)
+    # Si el robot no lo clasificó (o viene del test como 'No identificado'), lo clasificamos ahora.
+    if "tipo_decision" not in df.columns:
+        df["tipo_decision"] = "No identificado"
+
+    df["tipo_decision"] = df.apply(
+        lambda row: clasificar_texto_interno(row["detalle"])
+        if row["tipo_decision"] == "No identificado"
+        else row["tipo_decision"],
+        axis=1,
     )
 
+    # PASO 3: Enriquecimiento Teórico
+    detalles = df["tipo_decision"].apply(aplicar_matriz_teorica)
+    df = pd.concat(
+        [df.reset_index(drop=True), pd.json_normalize(detalles).reset_index(drop=True)],
+        axis=1,
+    )
+
+    # PASO 4: Índices
     desglose = df.apply(desglosar_indice, axis=1)
     df = pd.concat([df, desglose], axis=1)
 
-    # 2. Glosario con Referencias Académicas (ACTUALIZADO CON DETALLE DE DECISIONES)
+    # PASO 5: XAI y Auditoría
+    df["evidencia_xai"] = df.apply(recuperar_evidencia_xai, axis=1)
+    df["auditoria_estado"] = df.apply(flag_revision_humana, axis=1)
+
+    # PASO 6: Generación de Tablas (Glosario y Marco Teórico)
     glosario_data = [
+        {"Columna": "fecha", "Descripción": "Fecha publicación B.O."},
+        {"Columna": "tipo_decision", "Descripción": "Clasificación teórica."},
+        {"Columna": "evidencia_xai", "Descripción": "[XAI] Palabra clave exacta."},
         {
-            "Columna": "fecha",
-            "Descripción": "Fecha de publicación del Boletín Oficial analizado.",
+            "Columna": "auditoria_estado",
+            "Descripción": "[Control] Alerta de revisión humana.",
         },
-        {
-            "Columna": "seccion",
-            "Descripción": "Sección del BORA (1ra = Legislación, 3ra = Contrataciones).",
-        },
-        {
-            "Columna": "tipo_decision",
-            "Descripción": "Clasificación teórica según las 7 decisiones de 'Great Corruption': 1. Privatización/Concesión, 2. Obra Pública, 3. Tarifas, 4. Devaluación, 5. Servicios Privados, 6. Jubilaciones, 7. Traslado Impositivo.",
-        },
-        {
-            "Columna": "indice_total",
-            "Descripción": "Intensidad del fenómeno (0-100%). Suma de Legalidad + Discrecionalidad + Certeza.",
-        },
-        {
-            "Columna": "elaboracion_indice",
-            "Descripción": "Fórmula desglosada del cálculo del índice. Ver artículo: https://www.emerald.com/jfc/article-abstract/28/2/580/224032/Great-corruption-theory-of-corrupt-phenomena?redirectedFrom=fulltext",
-        },
-        {
-            "Columna": "origen",
-            "Descripción": "Sector que financia o pierde ingresos en la transferencia (Víctima económica).",
-        },
-        {
-            "Columna": "destino",
-            "Descripción": "Sector que recibe la renta o beneficio (Beneficiario / Rent Seeking).",
-        },
-        {
-            "Columna": "mecanismo",
-            "Descripción": "Herramienta técnica/legal usada para la transferencia (ej. Subsidio, Tarifa).",
-        },
-        {
-            "Columna": "detalle",
-            "Descripción": "Resumen extraído de la norma en el Boletín Oficial.",
-        },
-        {"Columna": "link", "Descripción": "Enlace a la fuente oficial."},
+        {"Columna": "indice_total", "Descripción": "Intensidad (0-100%)."},
+        {"Columna": "detalle", "Descripción": "Texto de la norma."},
     ]
     df_glosario = pd.DataFrame(glosario_data)
 
-    # 3. Guardar Excel con Múltiples Hojas
+    causas_data = []
+    for causa, data in MATRIZ_TEORICA.items():
+        causas_data.append(
+            {
+                "Fenómeno / Causa": causa,
+                "Origen (Víctima)": data["origen"],
+                "Destino (Beneficiario)": data["destino"],
+                "Mecanismo": data["mecanismo"],
+                "Certeza Teórica": f"{data['certeza_nivel']} ({data['puntos_certeza']} pts)",
+            }
+        )
+    df_causas = pd.DataFrame(causas_data)
+
+    # PASO 7: Exportación
     columnas_ordenadas = [
         "fecha",
         "seccion",
         "tipo_decision",
+        "evidencia_xai",
+        "auditoria_estado",
         "indice_total",
         "elaboracion_indice",
         "origen",
@@ -185,18 +317,27 @@ def analizar_boletin(df):
     cols_final = [c for c in columnas_ordenadas if c in df.columns]
     df_final = df[cols_final]
 
-    fecha = datetime.now().strftime("%Y%m%d")
-    output_path = os.path.join(DATA_DIR, f"reporte_fenomenos_{fecha}.xlsx")
+    fecha_str = datetime.now().strftime("%Y%m%d")
+    output_path = os.path.join(DATA_DIR, f"reporte_fenomenos_{fecha_str}.xlsx")
 
-    with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
-        df_final.to_excel(writer, index=False, sheet_name="Analisis")
-        ws_analisis = writer.sheets["Analisis"]
-        ws_analisis.column_dimensions["E"].width = 45
-        ws_analisis.column_dimensions["I"].width = 60
+    try:
+        with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+            df_final.to_excel(writer, index=False, sheet_name="Analisis")
 
-        df_glosario.to_excel(writer, index=False, sheet_name="Glosario")
-        ws_glosario = writer.sheets["Glosario"]
-        ws_glosario.column_dimensions["A"].width = 25
-        ws_glosario.column_dimensions['B'].width = 120 # Más ancho para que entren las definiciones largas
+            # Formateo
+            ws = writer.sheets["Analisis"]
+            ws.column_dimensions["D"].width = 25
+            ws.column_dimensions["E"].width = 25
+            ws.column_dimensions["K"].width = 60
+
+            df_causas.to_excel(writer, index=False, sheet_name="Marco Teorico")
+            ws_teoria = writer.sheets["Marco Teorico"]
+            ws_teoria.column_dimensions["A"].width = 35
+            ws_teoria.column_dimensions["B"].width = 30
+
+            df_glosario.to_excel(writer, index=False, sheet_name="Glosario")
+
+    except Exception as e:
+        print(f"Error guardando Excel: {e}")
 
     return df, output_path, df_glosario

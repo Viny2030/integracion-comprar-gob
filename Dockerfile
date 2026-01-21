@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copiamos el resto del código
 COPY . .
 
-CMD ["python", "main.py"]
+CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]

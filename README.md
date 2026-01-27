@@ -98,3 +98,19 @@ El sistema NO afirma ilegalidad
 El índice mide intensidad del fenómeno corruptivo legal, entendida como:
 
 Grado potencial de transferencia regresiva generado por una decisión estatal discrecional.
+
+## Base Teórica e Investigación
+Este proyecto es parte de una investigación personal, basada en el artículo:
+
+**"Great corruption – theory of corrupt phenomena"**
+*Publicado en Journal of Financial Crime (2020).*
+
+### Definición de Variables de Salida:
+- **fecha**: Emisión en el Boletín Oficial.
+- **tipo_decision**: Clasificación según los 7 escenarios de la Gran Corrupción.
+- **transferencia**: Sector económico afectado (Ej: Jubilados, Estado).
+- **indice_fenomeno_corruptivo**: Intensidad de 0 a 10.
+- **nivel_riesgo_teorico**: Evaluación de opacidad (Bajo/Medio/Alto).
+- **link**: Auditoría manual de la norma.
+
+[Ver artículo en Emerald Insight](https://www.emerald.com/jfc/article-abstract/28/2/580/224032/Great-corruption-theory-of-corrupt-phenomena)

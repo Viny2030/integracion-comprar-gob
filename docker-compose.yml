@@ -1,12 +1,13 @@
 services:
   app:
     build: .
-    container_name: fenomenos_corruptivos_app
+    container_name: monitor_corrupcion
     volumes:
-      - .:/app
+      - .:/app          # Sincroniza el código y el archivo .docx
+      - ./data:/app/data # Carpeta para los reportes Excel
     ports:
-      - "8501:8501" # Puerto estándar de Streamlit
+      - "8501:8501"     # Puerto de Streamlit
+    environment:
+      - PYTHONUNBUFFERED=1
     stdin_open: true
     tty: true
-    # Forzamos a que use 'streamlit run' para evitar el error de ScriptRunContext
-    command: streamlit run dashboard.py --server.address=0.0.0.0

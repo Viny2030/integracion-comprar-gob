@@ -2,158 +2,187 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import os
+import requests
+from bs4 import BeautifulSoup
 from datetime import datetime
-import analisis  # Importa tu motor de lógica ajustado a la teoría
+from analisis import analizar_boletin, MATRIZ_TEORICA
 
 # ===============================
-# CONFIGURACIÓN UI
+# 1. CONFIGURACIÓN UI
 # ===============================
-st.set_page_config(page_title="Monitor de Gran Corrupción", layout="wide")
+st.set_page_config(page_title="Monitor de Fenómenos Corruptivos", layout="wide")
 
-DATA_DIR = "/app/data" if os.path.exists("/app/data") else "data"
+DATA_DIR = "data" if os.path.exists("data") else "/app/data"
+DOC_FILE = "articulo_monteverde_español.docx"
 
-# ===============================
-# HEADER
-# ===============================
-st.title("⚖️ Fenómenos Corruptivos Legales")
-st.subheader("Implementación computacional de *The Great Corruption*")
-
-st.markdown(f"""
-Este sistema analiza **decisiones estatales legales** que, según la teoría económica del 
-**Ph.D. Vicente Humberto Monteverde**, pueden generar **transferencias regresivas de ingresos**. 
-No detecta delitos penales, sino la intensidad de fenómenos discrecionales.
-""")
-
-# ===============================
-# CARGA DE DATOS
-# ===============================
 if not os.path.exists(DATA_DIR):
     os.makedirs(DATA_DIR)
 
-ARCHIVOS = [
-    f for f in os.listdir(DATA_DIR) if f.endswith(".xlsx") or f.endswith(".csv")
-]
 
-if not ARCHIVOS:
-    st.error(f"No se encontraron reportes en la carpeta: {DATA_DIR}")
-    st.stop()
+# ===============================
+# 2. FUNCIONES DE APOYO (SCRAPER)
+# ===============================
+def extraer_datos_comprar_gob():
+    url = "https://comprar.gob.ar/Compras.aspx?qs=W1HXHGHtH10="
+    headers = {"User-Agent": "Mozilla/5.0"}
+    try:
+        response = requests.get(url, headers=headers, timeout=20)
+        soup = BeautifulSoup(response.text, "html.parser")
 
-archivo_selec = st.selectbox(
-    "Seleccioná el reporte a analizar:", sorted(ARCHIVOS, reverse=True)
+        # Intenta localizar la tabla de licitaciones
+        tabla = soup.find("table", {"id": "ctl00_CPH1_GridLicitaciones"})
+        if not tabla:
+            tabla = soup.find("table")
+
+        if not tabla:
+            return pd.DataFrame()
+
+        rows = tabla.find_all("tr")
+        datos = []
+        for row in rows[1:]:
+            cols = row.find_all("td")
+            if len(cols) > 2:
+                detalle_texto = cols[2].text.strip()
+                link_tag = cols[2].find("a")
+                link_aviso = (
+                    "https://comprar.gob.ar" + link_tag["href"] if link_tag else url
+                )
+
+                datos.append(
+                    {
+                        "fecha": datetime.now().strftime("%Y-%m-%d"),
+                        "detalle": detalle_texto,
+                        "link": link_aviso,
+                    }
+                )
+        return pd.DataFrame(datos)
+    except Exception as e:
+        st.error(f"Error de conexión con el portal: {e}")
+        return pd.DataFrame()
+
+
+# ===============================
+# 3. HEADER Y ESTRUCTURA DE PESTAÑAS
+# ===============================
+st.title("📉 Monitor de Fenómenos Corruptivos")
+st.subheader("Implementación de *The Great Corruption* - Ph.D. Monteverde")
+
+# DEFINICIÓN ÚNICA DE PESTAÑAS
+tab_monitor, tab_analisis, tab_documentacion = st.tabs(
+    [
+        "📊 Monitor Histórico",
+        "🚀 Análisis Comprar.gob.ar",
+        "📄 Documentación Científica",
+    ]
 )
-ruta_completa = os.path.join(DATA_DIR, archivo_selec)
 
-try:
-    df = (
-        pd.read_excel(ruta_completa)
-        if archivo_selec.endswith(".xlsx")
-        else pd.read_csv(ruta_completa)
-    )
-except Exception as e:
-    st.error(f"Error al leer el archivo: {e}")
-    st.stop()
+# --- PESTAÑA 1: MONITOR ---
+with tab_monitor:
+    st.header("Visualización de Reportes")
+    archivos = [f for f in os.listdir(DATA_DIR) if f.endswith(".xlsx")]
 
-# ===============================
-# MÉTRICAS Y GRÁFICOS
-# ===============================
-df_teoria = df[df["tipo_decision"] != "No identificado"]
-
-m1, m2, m3, m4 = st.columns(4)
-m1.metric("Normas Analizadas", len(df))
-
-if not df_teoria.empty:
-    m2.metric("Fenómenos Detectados", len(df_teoria))
-    m3.metric("Índice Promedio", f"{int(df_teoria['indice_total'].mean())}%")
-    m4.metric(
-        "Riesgo Alto", len(df_teoria[df_teoria["nivel_riesgo_teorico"] == "Alto"])
-    )
-
-    st.divider()
-
-    # Gráfico de Dispersión de Intensidad
-    st.subheader("📊 Mapa de Intensidad de Fenómenos Corruptivos")
-    fig, ax = plt.subplots(figsize=(10, 4))
-    colores = {"Alto": "red", "Medio": "orange", "Bajo": "blue"}
-
-    for nivel, color in colores.items():
-        subset = df_teoria[df_teoria["nivel_riesgo_teorico"] == nivel]
-        ax.scatter(
-            subset["tipo_decision"],
-            subset["indice_total"],
-            c=color,
-            label=nivel,
-            s=100,
-            edgecolors="black",
+    if not archivos:
+        st.info("No se encontraron reportes en /data.")
+    else:
+        archivo_selec = st.selectbox(
+            "Seleccioná un reporte:", sorted(archivos, reverse=True)
         )
+        ruta = os.path.join(DATA_DIR, archivo_selec)
 
-    plt.xticks(rotation=45, ha="right")
-    ax.set_ylabel("Índice de Intensidad (%)")
-    ax.legend(title="Riesgo Teórico")
-    st.pyplot(fig)
-else:
-    st.warning(
-        "El reporte seleccionado no contiene fenómenos identificados bajo la matriz teórica."
+        try:
+            xl = pd.ExcelFile(ruta)
+            df = xl.parse(xl.sheet_names[0])
+            df.columns = df.columns.astype(str).str.strip().str.lower()
+
+            m1, m2, m3 = st.columns(3)
+            m1.metric("Total Normas", len(df))
+
+            if "tipo_decision" in df.columns:
+                df_id = df[df["tipo_decision"].str.lower() != "no identificado"]
+                m2.metric("Fenómenos Detectados", len(df_id))
+
+                if "indice_total" in df.columns:
+                    df["indice_total"] = pd.to_numeric(
+                        df["indice_total"], errors="coerce"
+                    ).fillna(0)
+                    m3.metric(
+                        "Intensidad Promedio", f"{int(df['indice_total'].mean())}%"
+                    )
+                else:
+                    m3.metric("Índice", "N/D")
+
+                st.dataframe(df, use_container_width=True)
+
+            st.divider()
+            col_g, col_m = st.columns(2)
+            with col_g:
+                st.subheader("📖 Glosario")
+                if "Glosario" in xl.sheet_names:
+                    st.table(xl.parse("Glosario"))
+                else:
+                    st.caption("Glosario de respaldo (Archivo antiguo):")
+                    st.table(
+                        pd.DataFrame(
+                            {
+                                "Variable": ["tipo_decision", "transferencia"],
+                                "Definición": ["Categoría teórica", "Sector afectado"],
+                            }
+                        )
+                    )
+            with col_m:
+                st.subheader("🔬 Marco Teórico")
+                resumen = [
+                    {"Escenario": k, "Mecanismo": v["mecanismo"]}
+                    for k, v in MATRIZ_TEORICA.items()
+                ]
+                st.table(pd.DataFrame(resumen))
+
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+# --- PESTAÑA 2: SCRAPER ---
+with tab_analisis:
+    st.header("🔗 Conexión Real: Comprar.gob.ar")
+    st.markdown(
+        "Este botón extrae licitaciones vigentes y las clasifica según la matriz de algoritmos."
     )
 
-st.divider()
+    if st.button("🚀 Scraper: Analizar Licitaciones en Vivo"):
+        with st.spinner("Extrayendo datos del portal de compras..."):
+            df_portal = extraer_datos_comprar_gob()
 
-# ===============================
-# EXPLORADOR DE DATOS
-# ===============================
-st.header("🔍 Exploración de Normas")
-cols_vista = [
-    "fecha",
-    "tipo_decision",
-    "indice_total",
-    "nivel_riesgo_teorico",
-    "origen",
-    "mecanismo",
-    "link",
-]
-st.dataframe(df[[c for c in cols_vista if c in df.columns]], use_container_width=True)
+            if not df_portal.empty:
+                st.write(f"Se encontraron **{len(df_portal)}** procesos para analizar.")
+                df_res, path_excel, _ = analizar_boletin(df_portal)
 
-# ===============================
-# GLOSARIO TEÓRICO
-# ===============================
-st.divider()
-with st.expander("📖 Glosario: Los 7 Escenarios de la Gran Corrupción", expanded=False):
-    st.markdown("### Matriz de Transferencia de Ingresos")
-    st.write("""
-    Según la teoría expuesta en el artículo, estos escenarios representan decisiones estatales 
-    discrecionales que redistribuyen la riqueza de forma regresiva:
+                if path_excel:
+                    st.success(
+                        f"Análisis completado. Archivo: {os.path.basename(path_excel)}"
+                    )
+                    st.dataframe(df_res)
+            else:
+                st.warning(
+                    "No se capturaron datos. El portal puede estar caído o requiere validación de sesión."
+                )
+
+# --- PESTAÑA 3: DOCUMENTACIÓN ---
+with tab_documentacion:
+    st.header("Fundamentación Académica")
+    st.markdown("""
+    El sistema identifica transferencias regresivas basadas en los 7 escenarios de la Gran Corrupción:
+    - Privatizaciones y Concesiones.
+    - Contratos de Obra Pública.
+    - Tarifas y Servicios.
+    - Cálculo Previsional, etc.
     """)
 
-    glosario_teorico = {
-        "Escenario": [
-            "1. Privatizaciones / Concesiones",
-            "2. Contratos Públicos",
-            "3. Tarifas de Servicios Públicos",
-            "4. Autorizaciones de Precios",
-            "5. Precios de Salud y Educación",
-            "6. Jubilaciones y Pensiones",
-            "7. Traslado de Impuestos",
-        ],
-        "Descripción Teórica": [
-            "Transferencia de patrimonio estatal a privados por debajo del valor real.",
-            "Sobreprecios o continuación de obras ineficientes basándose en la legalidad.",
-            "Aumentos que compensan devaluaciones beneficiando a concesionarias.",
-            "Validación discrecional de aumentos en sectores regulados.",
-            "Aumentos autorizados por encima de la capacidad de ajuste del salario.",
-            "Ajustes de movilidad que transfieren ingresos del jubilado al Estado.",
-            "Doble imposición trasladada directamente al consumidor (Fenómeno Desastroso).",
-        ],
-    }
-    st.table(pd.DataFrame(glosario_teorico))
-
-# ==========================================
-# REFERENCIA ACADÉMICA (Final de página)
-# ==========================================
-st.divider()
-st.markdown("### 📄 Referencia Académica del Marco Teórico")
-st.info(f"""
-Este desarrollo implementa la metodología de análisis de **transferencia de ingresos** detallada en el artículo científico del **Ph.D. Vicente Humberto Monteverde**:
-
-**"Great corruption - theory of corrupt phenomena"** Publicado en: *Journal of Financial Crime, Vol. 28 No. 2, pp. 580-596.*
-
-🔗 [**Acceder al artículo original en Emerald Insight**](https://www.emerald.com/jfc/article-abstract/28/2/580/224032/Great-corruption-theory-of-corrupt-phenomena?redirectedFrom=fulltext)
-""")
+    if os.path.exists(DOC_FILE):
+        with open(DOC_FILE, "rb") as f:
+            st.download_button(
+                label="📥 Descargar Artículo Ph.D. Monteverde (ES)",
+                data=f,
+                file_name=DOC_FILE,
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            )
+    else:
+        st.error(f"Archivo {DOC_FILE} no encontrado en la raíz.")

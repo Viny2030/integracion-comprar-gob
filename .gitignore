@@ -1,0 +1,14 @@
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# Archivos de datos (opcional, si no quieres subir Excels pesados)
+*.xlsx
+!data/plantilla.xlsx # (Ejemplo: ignora todos excepto una plantilla)
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env

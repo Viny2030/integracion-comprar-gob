@@ -1,6 +1,8 @@
-requests
-beautifulsoup4
 streamlit
 pandas
 matplotlib
 openpyxl
+requests
+beautifulsoup4
+lxml
+plotly

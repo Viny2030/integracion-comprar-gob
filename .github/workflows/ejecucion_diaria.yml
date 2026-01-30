@@ -40,10 +40,7 @@ jobs:
         run: |
           git config --global user.name 'Robot Monitor'
           git config --global user.email 'robot@noreply.github.com'
-          # Creamos data por si el script falló pero queremos evitar errores de git
-          mkdir -p data
-          git add data/*.xlsx || true
-          # El commit solo se realiza si hay cambios reales detectados
+          # El comando 'add -f' ignora el .gitignore para estos archivos específicos
+          git add -f data/reporte_fenomenos_*.xlsx
           git commit -m "Reporte Automático Integrado: $(date +'%Y-%m-%d')" || exit 0
-          # Empujamos los cambios a la rama actual de trabajo
           git push origin HEAD

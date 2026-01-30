@@ -176,3 +176,19 @@ with st.expander("🔬 Fundamento Científico y Matriz XAI", expanded=False):
     )
 
 st.caption(f"Sistema validado - Ph.D. Vicente Humberto Monteverde | Ejecución: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
+
+# ===============================
+# DESCARGA DEL ARTÍCULO ORIGINAL
+# ===============================
+st.divider()
+articulo_path = "articulo_monteverde_español.docx"
+if os.path.exists(articulo_path):
+    with open(articulo_path, "rb") as file:
+        st.download_button(
+            label="📄 Descargar Artículo Original (Monteverde, 2020)",
+            data=file,
+            file_name="articulo_monteverde_español.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        )
+else:
+    st.warning("El artículo no está disponible en el directorio principal")

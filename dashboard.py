@@ -1,189 +1,55 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+import plotly.express as px # Usamos plotly para mejores gráficos
 import os
 from datetime import datetime
 
-# ===============================
-# CONFIGURACIÓN GENERAL
-# ===============================
-st.set_page_config(
-    page_title="Fenómenos Corruptivos – Dashboard Teórico", layout="wide"
-)
+st.set_page_config(page_title="Monitor de Gran Corrupción", layout="wide")
 
-# Ajuste de ruta para entorno Docker o local
+# Rutas compatibles con Docker
 DATA_DIR = "/app/data" if os.path.exists("/app/data") else "data"
-if not os.path.exists(DATA_DIR):
-    os.makedirs(DATA_DIR)
 
-# Buscar reportes generados
-ARCHIVOS = [
-    f for f in os.listdir(DATA_DIR) if f.endswith(".xlsx") or f.endswith(".csv")
-]
+st.title("⚖️ Monitor de Fenómenos Corruptivos Legales")
+st.subheader("Implementación de la Teoría del Ph.D. Vicente Humberto Monteverde")
 
-# ===============================
-# HEADER
-# ===============================
-st.title("📉 Monitor de Fenómenos Corruptivos")
-st.subheader("Implementación computacional de *The Great Corruption*")
-
-st.markdown(f"""
-Este sistema analiza **decisiones estatales legales** que, según la teoría económica del 
-**Ph.D. Vicente Humberto Monteverde**, pueden generar **transferencias regresivas de ingresos**. 
-No detecta delitos penales, sino la intensidad de fenómenos discrecionales.
-""")
-
-# ===============================
-# CARGA Y ESTANDARIZACIÓN
-# ===============================
-if not ARCHIVOS:
-    st.error(f"No se encontraron reportes en: {DATA_DIR}")
+# CARGA DE DATOS
+archivos = [f for f in os.listdir(DATA_DIR) if f.endswith(".xlsx")]
+if not archivos:
+    st.error("No se encontraron reportes. Ejecutá primero 'diario.py'")
     st.stop()
 
-archivo_selec = st.selectbox(
-    "Seleccioná el reporte a visualizar:", sorted(ARCHIVOS, reverse=True)
-)
-ruta_completa = os.path.join(DATA_DIR, archivo_selec)
+archivo_selec = st.sidebar.selectbox("Seleccioná un Reporte", sorted(archivos, reverse=True))
+df = pd.read_excel(os.path.join(DATA_DIR, archivo_selec))
 
-df = (
-    pd.read_excel(ruta_completa)
-    if archivo_selec.endswith(".xlsx")
-    else pd.read_csv(ruta_completa)
-)
+# MÉTRICAS IMPACTANTES
+df_detectados = df[df["tipo_decision"] != "No identificado"]
+m1, m2, m3 = st.columns(3)
+m1.metric("Total Normas Analizadas", len(df))
+m2.metric("Fenómenos Detectados", len(df_detectados))
+m3.metric("Riesgo Máximo Detectado", f"{df['indice_fenomeno_corruptivo'].max()}/10")
 
-# Mapeo de compatibilidad
-mapeo = {
-    "origen": "transferencia",
-    "indice_total": "indice_fenomeno_corruptivo",
-    "nivel_riesgo": "nivel_riesgo_teorico",
-}
-df = df.rename(columns=mapeo)
+# GRÁFICOS DINÁMICOS
+col_izq, col_der = st.columns(2)
 
-# Normalización de escala 0-10
-if (
-    "indice_fenomeno_corruptivo" in df.columns
-    and df["indice_fenomeno_corruptivo"].max() > 10
-):
-    df["indice_fenomeno_corruptivo"] = (df["indice_fenomeno_corruptivo"] / 10).round(1)
+with col_izq:
+    st.write("### 📊 Escenarios de la Gran Corrupción")
+    fig = px.bar(df_detectados, y="tipo_decision", color="nivel_riesgo_teorico", 
+                 orientation='h', title="Distribución por Escenario")
+    st.plotly_chart(fig, use_container_width=True)
 
-# ===============================
-# MÉTRICAS PRINCIPALES
-# ===============================
-c1, c2, c3, c4 = st.columns(4)
-c1.metric("Total Normas", len(df))
-c2.metric(
-    "Fenómenos Detectados",
-    len(df[df["tipo_decision"] != "No identificado"])
-    if "tipo_decision" in df.columns
-    else 0,
-)
-c3.metric(
-    "Índice Promedio",
-    f"{df['indice_fenomeno_corruptivo'].mean():.1f}/10"
-    if "indice_fenomeno_corruptivo" in df.columns
-    else "N/D",
-)
-c4.metric(
-    "Casos Riesgo Alto",
-    len(df[df["nivel_riesgo_teorico"] == "Alto"])
-    if "nivel_riesgo_teorico" in df.columns
-    else 0,
-)
+with col_der:
+    st.write("### 💸 Sectores Afectados (Transferencia)")
+    fig_pie = px.pie(df_detectados, names="transferencia", hole=0.4)
+    st.plotly_chart(fig_pie, use_container_width=True)
 
-# ===============================
-# VISUALIZACIONES
-# ===============================
-st.divider()
-col_g1, col_g2 = st.columns(2)
+# TABLA DE AUDITORÍA
+st.header("🔍 Detalle de Decisiones Estatales")
+st.dataframe(df_detectados, use_container_width=True)
 
-with col_g1:
-    if "tipo_decision" in df.columns:
-        st.write("### Distribución por Escenario Teórico")
-        fig, ax = plt.subplots()
-        df["tipo_decision"].value_counts().plot(kind="barh", ax=ax, color="skyblue")
-        st.pyplot(fig)
-
-with col_g2:
-    if "nivel_riesgo_teorico" in df.columns:
-        st.write("### Intensidad de Riesgo")
-        fig, ax = plt.subplots()
-        df["nivel_riesgo_teorico"].value_counts().plot(
-            kind="pie", autopct="%1.1f%%", ax=ax, colors=["red", "orange", "green"]
-        )
-        ax.set_ylabel("")
-        st.pyplot(fig)
-
-# ===============================
-# EXPLORADOR DE DATOS
-# ===============================
-st.divider()
-st.header("🔍 Exploración de Decisiones Estatales")
-cols_view = [
-    "fecha",
-    "tipo_decision",
-    "transferencia",
-    "indice_fenomeno_corruptivo",
-    "nivel_riesgo_teorico",
-    "link",
-]
-cols_finales = [c for c in cols_view if c in df.columns]
-
-st.dataframe(
-    df[cols_finales],
-    use_container_width=True,
-    column_config={
-        "link": st.column_config.LinkColumn("Norma BORA"),
-        "indice_fenomeno_corruptivo": st.column_config.ProgressColumn(
-            "Intensidad", min_value=0, max_value=10
-        ),
-    },
-)
-
-# ===============================
-# EXPLICACIÓN DE COLUMNAS (NUEVO)
-# ===============================
-st.divider()
-with st.expander("📖 Glosario y Explicación de Variables"):
+# FUNDAMENTO TEÓRICO [cite: 3, 8, 19]
+with st.expander("📖 Glosario y Marco Científico"):
     st.markdown("""
-    | Variable | Significado Teórico |
-    | :--- | :--- |
-    | **Tipo de Decisión** | Mapeo de la norma hacia los 7 escenarios de la teoría (Contratos, Tarifas, Jubilaciones, etc.). |
-    | **Transferencia** | Identifica el sector que soporta el costo económico (Estado, Jubilados, Consumidores). |
-    | **Índice Fenómeno** | Puntuación de 0 a 10 que mide el grado de discrecionalidad y potencial transferencia regresiva. |
-    | **Nivel de Riesgo** | Evaluación cualitativa de la opacidad y el impacto social de la decisión. |
+    **La Gran Corrupción** no son solo sobornos; son decisiones **legales y discrecionales** que redistribuyen el ingreso de forma inequitativa[cite: 17, 19].
+    * **Jubilados al Estado:** Reducción del gasto mediante erosión de ingresos pasivos.
+    * **Contratos Públicos:** Sobreprecios basados en la 'legalidad' de la continuación de contratos[cite: 162].
     """)
-
-# ===============================
-# FUNDAMENTO TEÓRICO (NUEVO)
-# ===============================
-st.header("🔬 Fundamentación Científica")
-tabs = st.tabs(["Núcleo de la Teoría", "Escenarios Analizados", "Impacto Social"])
-
-with tabs[0]:
-    st.markdown("""
-    **Gran Corrupción - Teoría de los Fenómenos Corruptivos** Esta teoría, formulada por el **Ph.D. Vicente Humberto Monteverde**, propone un cambio de paradigma: 
-    la corrupción no solo son delitos penales (sobornos), sino decisiones **discrecionales y legales** que producen distribuciones inequitativas de ingresos.
-
-    * **Búsqueda de Rentas (Rent Seeking):** El ingreso no se obtiene por el mercado, sino por subsidios o privilegios otorgados por el Estado.
-    * **Legalidad como Escudo:** Es difícil de combatir porque ocurre dentro de la estructura normativa y ética vigente.
-    """)
-
-with tabs[1]:
-    st.markdown("""
-    El sistema identifica los **7 escenarios críticos** descritos en la obra original:
-    1.  **Privatizaciones Subvaluadas:** Transferencia del Estado a empresas.
-    2.  **Contratos Públicos Ineficientes:** Continuidad de obras sin análisis de opciones.
-    3.  **Compensación por Devaluación:** Transferencia directa de consumidores a empresas.
-    4.  **Aumentos Tarifarios Discrecionales:** Sin considerar el ajuste salarial de la población.
-    5.  **Servicios Privados de Necesidad:** Aumentos en salud/educación sin considerar el ingreso disponible.
-    6.  **Cálculo Previsional:** Transferencia de ingresos de jubilados hacia el Estado.
-    7.  **Traslación Impositiva:** Cuando el Estado permite pasar impuestos corporativos al precio final del consumidor.
-    """)
-
-with tabs[2]:
-    st.info(f"""
-    **Referencia Académica:** Monteverde, V. H. (2020). *Great corruption – theory of corrupt phenomena*. Journal of Financial Crime.  
-    🔗 [Acceder al artículo original en Emerald Insight](https://www.emerald.com/jfc/article-abstract/28/2/580/224032/Great-corruption-theory-of-corrupt-phenomena?redirectedFrom=fulltext)
-    """)
-
-st.caption(f"Última actualización del monitor: {datetime.now().strftime('%d/%m/%Y %H:%M')}")

@@ -1,23 +1,10 @@
 version: '3.8'
-
 services:
-  # Contenedor 1: Producción / Monitor Principal
   app:
     build: .
-    container_name: monitor_principal
+    container_name: monitor_integracion
     ports:
       - "8501:8501"
     volumes:
       - .:/app
-    command: streamlit run main.py --server.port 8501
-
-  # Contenedor 2: Auditoría / Segundo Sitio
-  app_auditoria:
-    build: .
-    container_name: monitor_auditoria
-    ports:
-      - "8502:8502" # <--- Mapeo al puerto 8502
-    volumes:
-      - .:/app
-    # Forzamos a Streamlit a escuchar en el 8502
-    command: streamlit run main.py --server.port 8502
+    command: streamlit run dashboard.py --server.address=0.0.0.0

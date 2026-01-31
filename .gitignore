@@ -1,10 +1,5 @@
-# Python
 __pycache__/
-*.py[cod]
-*$py.class
 venv/
 .env
-
-# Docker & OS
-.DS_Store
-Thumbs.db
+.idea/
+*.log

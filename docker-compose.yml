@@ -1,10 +1,33 @@
 version: '3.8'
+
 services:
-  app:
+  # Servicio del Dashboard (siempre activo)
+  dashboard:
     build: .
-    container_name: monitor_integracion
+    container_name: monitor_dashboard
     ports:
       - "8501:8501"
     volumes:
-      - .:/app
+      - ./data:/app/data
     command: streamlit run dashboard.py --server.address=0.0.0.0
+    restart: unless-stopped
+    networks:
+      - monitor_network
+
+  # Servicio del Scraper (ejecutar manualmente cuando necesites)
+  scraper:
+    build: .
+    container_name: monitor_scraper
+    volumes:
+      - ./data:/app/data
+    command: python diario.py
+    depends_on:
+      - dashboard
+    networks:
+      - monitor_network
+    profiles:
+      - scraper  # Esto evita que se ejecute automáticamente con docker-compose up
+
+networks:
+  monitor_network:
+    driver: bridge

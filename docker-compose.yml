@@ -1,5 +1,4 @@
-version: '3.8'
-
+# He eliminado la línea 'version' porque ya no es necesaria en Docker moderno
 services:
   # Servicio del Dashboard (siempre activo)
   dashboard:
@@ -10,7 +9,7 @@ services:
     volumes:
       - ./data:/app/data
     command: streamlit run dashboard.py --server.address=0.0.0.0
-    restart: unless-stopped
+    restart: always  # Cambiado a 'always' para que inicie solo al prender la PC
     networks:
       - monitor_network
 
@@ -26,7 +25,7 @@ services:
     networks:
       - monitor_network
     profiles:
-      - scraper  # Esto evita que se ejecute automáticamente con docker-compose up
+      - scraper
 
 networks:
   monitor_network:

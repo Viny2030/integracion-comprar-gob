@@ -289,13 +289,9 @@ with st.expander("🔬 Fundamento Científico y Matriz XAI", expanded=False):
         "Referencia Académica: Monteverde, V. H. (2020). Great corruption – theory of corrupt phenomena. Journal of Financial Crime. [cite: 11, 193]"
     )
 
-<<<<<<< HEAD
-st.caption(f"Sistema validado - Ph.D. Vicente Humberto Monteverde | Ejecución: {datetime.now().strftime('%d/%m/%Y %H:%M')}")
-=======
 st.caption(
     f"Sistema validado - Ph.D. Vicente Humberto Monteverde | Ejecución: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
 )
->>>>>>> 3e6c91c (Sistema actualizado: Soporte para reportes multimensuales y datos de enero)
 
 # ===============================
 # DESCARGA DEL ARTÍCULO ORIGINAL
@@ -312,8 +308,6 @@ if os.path.exists(articulo_path):
         )
 else:
     st.warning("El artículo no está disponible en el directorio principal")
-<<<<<<< HEAD
-=======
 
 # ===============================
 # ANÁLISIS AVANZADOS - TEORÍA MONTEVERDE
@@ -591,4 +585,3 @@ if not df_detectados.empty:
     **transferencias regresivas de ingresos**, afectando la distribución económica y la equidad social. 
     La detección temprana permite visibilizar estas decisiones discrecionales del Estado.
     """)
->>>>>>> 3e6c91c (Sistema actualizado: Soporte para reportes multimensuales y datos de enero)

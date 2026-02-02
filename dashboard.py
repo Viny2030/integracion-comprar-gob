@@ -327,17 +327,36 @@ st.caption(
 # DESCARGA DEL ARTÍCULO
 # ===============================
 st.divider()
-articulo_path = "articulo_monteverde_español.docx"
-if os.path.exists(articulo_path):
-    with open(articulo_path, "rb") as file:
-        st.download_button(
-            label="📄 Descargar Artículo Original (Monteverde, 2020)",
-            data=file,
-            file_name="articulo_monteverde_español.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        )
-else:
-    st.warning("El artículo no está disponible")
+
+col_art1, col_art2 = st.columns(2)
+
+with col_art1:
+    articulo_path = "articulo_monteverde_español.docx"
+    if os.path.exists(articulo_path):
+        with open(articulo_path, "rb") as file:
+            st.download_button(
+                label="📄 Descargar Artículo Original (Word)",
+                data=file,
+                file_name="articulo_monteverde_español.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                use_container_width=True,
+            )
+    else:
+        st.warning("El artículo no está disponible")
+
+with col_art2:
+    articulo_pdf_path = "articulo_monteverde_español.pdf"
+    if os.path.exists(articulo_pdf_path):
+        with open(articulo_pdf_path, "rb") as file:
+            st.download_button(
+                label="📄 Descargar Artículo Original (PDF)",
+                data=file,
+                file_name="articulo_monteverde_español.pdf",
+                mime="application/pdf",
+                use_container_width=True,
+            )
+    else:
+        st.warning("El artículo PDF no está disponible")
 
 # ===============================
 # ANÁLISIS AVANZADOS

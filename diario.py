@@ -62,6 +62,9 @@ def extraer_licitaciones():
                 nro_proceso = cols[1].text.strip()
                 detalle_texto = cols[2].text.strip()
                 tipo_proceso = cols[3].text.strip()  # Captura Licitación/Contratación
+                
+                # CORRECCIÓN: Capturar fecha de apertura (columna 4)
+                fecha_apertura = cols[4].text.strip() if len(cols) > 4 else "No especificada"
 
                 link_tag = cols[2].find("a")
                 link_completo = (
@@ -73,7 +76,8 @@ def extraer_licitaciones():
                         "fecha": datetime.now().strftime("%Y-%m-%d"),
                         "nro_proceso": nro_proceso,
                         "detalle": detalle_texto,
-                        "tipo_proceso": tipo_proceso,  # Columna clave para la matriz
+                        "tipo_proceso": tipo_proceso,
+                        "fecha_apertura": fecha_apertura,  # NUEVA COLUMNA
                         "link": link_completo,
                         "fuente": "Scraper Automático Comprar",
                     }
@@ -110,6 +114,7 @@ def ejecutar_robot():
                     "detalle": "Sin datos detectados en el portal",
                     "link": "n/a",
                     "tipo_proceso": "n/a",
+                    "fecha_apertura": "n/a",
                 }
             ]
         )
@@ -196,4 +201,5 @@ SOLO SE CAMBIA:
 
 Si NO puedes modificar analisis.py, el código actual de diario.py tiene
 un fallback que moverá automáticamente el archivo al directorio correcto.
+"""
 """

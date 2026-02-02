@@ -1,46 +1,35 @@
 name: Monitor Diario Integrado BORA y Compras
-
 on:
   schedule:
     # Corre a las 10:00 UTC (07:00 AM en Argentina)
     - cron: '0 10 * * *'
   workflow_dispatch: # Permite ejecución manual
-
 permissions:
   contents: write
-
 jobs:
   run-analysis:
     runs-on: ubuntu-latest
-
     steps:
       - name: Descargar código (Checkout)
-        uses: actions/checkout@v4 # Versión actualizada v4 para mayor estabilidad
+        uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Descarga todo el historial para evitar errores de fetch
-
+          fetch-depth: 0
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # Sincronizado con tu entorno estable local
-
+          python-version: '3.12'
       - name: Instalar librerías
         run: |
           python -m pip install --upgrade pip
           pip install pandas requests beautifulsoup4 openpyxl lxml
-
       - name: Ejecutar Ciclo Integrado (Paso 1-2-3)
-        # Asegura que el proceso de captura y análisis se ejecute en el entorno correcto
         run: python diario.py
-
       - name: Listar archivos generados (Debug)
         run: ls -R data/ || echo "No se encontró la carpeta data"
-
       - name: Guardar Reporte y Sincronizar (Commit & Push)
         run: |
           git config --global user.name 'Robot Monitor'
           git config --global user.email 'robot@noreply.github.com'
-          # El comando 'add -f' ignora el .gitignore para estos archivos específicos
-          git add -f data/reporte_fenomenos_*.xlsx
+          git add data/                                                    # ← CAMBIO: Agregar toda la carpeta data/
           git commit -m "Reporte Automático Integrado: $(date +'%Y-%m-%d')" || exit 0
           git push origin HEAD

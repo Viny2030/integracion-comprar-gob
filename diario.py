@@ -172,7 +172,7 @@ if __name__ == "__main__":
 # ==========================================
 # INSTRUCCIONES PARA ACTUALIZAR analisis.py
 # ==========================================
-"""
+
 MODIFICACIÓN NECESARIA EN analisis.py:
 
 Buscar la función analizar_boletin y modificarla así:
